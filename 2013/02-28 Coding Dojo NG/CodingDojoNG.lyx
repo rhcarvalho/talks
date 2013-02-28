@@ -217,7 +217,15 @@ About me, this talk and you
 \end_layout
 
 \begin_layout Itemize
-Founder of the Coding Dojo Rio group in Brazil (2008)
+Founder of the 
+\begin_inset CommandInset href
+LatexCommand href
+name "Coding Dojo Rio"
+target "http://dojorio.org/about"
+
+\end_inset
+
+ group in Brazil (2008)
 \begin_inset VSpace defskip
 \end_inset
 
@@ -271,11 +279,8 @@ The Foundation
 \end_layout
 
 \begin_layout Standard
-Practing principles and practices from Agile methodologies
-\begin_inset VSpace defskip
-\end_inset
-
-
+\align center
+Principles and practices from Agile methodologies
 \begin_inset VSpace defskip
 \end_inset
 
@@ -426,7 +431,7 @@ sharing
 \end_layout
 
 \begin_layout Itemize
-comprehend that different people have 
+comprehending that different people have 
 \series bold
 different points of view
 \series default
@@ -463,8 +468,8 @@ intentions
 \end_layout
 
 \begin_layout Standard
-I believe that learning without being able to communicate whatever it is
- that you're learning has no point.
+Learning without being able to communicate whatever it is that you're learning
+ has no point.
 \end_layout
 
 \begin_layout BeginFrame
@@ -662,7 +667,7 @@ status open
 
 
 \begin_inset Graphics
-	filename ../2013-02-28 Python in 15 minutes/imgs/weixin-rodolfo.png
+	filename imgs/weixin-rodolfo.png
 	width 95text%
 
 \end_inset
