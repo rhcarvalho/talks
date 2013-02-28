@@ -1,0 +1,992 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{Madrid}
+\usecolortheme{spruce}
+\setbeamercovered{transparent}
+
+\usepackage{tikz}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language chinese-simplified
+\language_package default
+\inputencoding UTF8
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\font_cjk gbsn
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Python in 15 minutes
+\end_layout
+
+\begin_layout Author
+\begin_inset Graphics
+	filename imgs/python-logo-master-v3-TM-flattened.png
+	height 4em
+	BoundingBox 50bp 20bp 220bp 203bp
+	clip
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Rodolfo
+\begin_inset space ~
+\end_inset
+
+Henrique
+\begin_inset space ~
+\end_inset
+
+Carvalho
+\begin_inset Newline newline
+\end_inset
+
+郝多福
+\begin_inset Argument
+status open
+
+\begin_layout Plain Layout
+Rodolfo 郝多福
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+中国北京，2013年2月28日
+\begin_inset Argument
+status open
+
+\begin_layout Plain Layout
+2013-02-28
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+% Python logo
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+pgfdeclareimage[height=0.6cm]{institution-logo}{imgs/python-logo-generic}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+logo{
+\backslash
+pgfuseimage{institution-logo}}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%Map_of_Brazil_with_flag
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+setbeamertemplate{background}{
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+node[opacity=0.2]{
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1.8cm}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=
+\backslash
+paperheight,keepaspectratio=true]{imgs/Map_of_Brazil_with_flag.pdf}
+\end_layout
+
+\begin_layout Plain Layout
+
+};
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+About me and you
+\end_layout
+
+\begin_layout Itemize
+Pythonista since 2006
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Wrote from small scripts to bigger systems with tons of users and tens of
+ developers
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Web programming (Turbogears, Django, Bottle, ...)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Founder of the Coding Dojo Rio group in Brazil (2008)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+XMPPVOX (2012)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Crawlers, parsers, and several other kinds of programs...
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Concurrent/parallel programs (multiprocessing, threads, greenlets, ...)
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+setbeamertemplate{background}{}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+About Python
+\end_layout
+
+\begin_layout Standard
+From the official website:
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Quotation
+Python is a remarkably powerful dynamic programming language that is used
+ in a wide variety of application domains.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Quotation
+Python is often compared to Tcl, Perl, Ruby, Scheme or Java.
+ 
+\end_layout
+
+\begin_layout BeginFrame
+Features
+\end_layout
+
+\begin_layout Itemize
+clear syntax
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+introspection
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+multiparadigm (OO, procedural, functional, ...)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+very high level dynamic data types (lists, sets, maps, ...)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+batteries included
+\begin_inset Quotes erd
+\end_inset
+
+ + 3rd party modules for virtually every task
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+extensions and modules in C, C++ (or Java for Jython, or .NET languages for
+ IronPython)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+embeddable within applications as a scripting interface (e.g.: games)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+extensive unittest support
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+docstrings
+\end_layout
+
+\begin_layout BeginFrame
+>>> import this (The Zen of Python)
+\end_layout
+
+\begin_layout Standard
+Beautiful 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+is better than ugly.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Explicit 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+is better than implicit.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Simple 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+is better than complex.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Complex is better than complicated.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Flat 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+is better than nested.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Sparse 
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+is better than dense.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Readability counts.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Special cases aren't special enough to break the rules.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Although
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+ practicality beats purity.
+\end_layout
+
+\begin_layout BeginFrame
+>>> import this (The Zen of Python)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Errors should never pass silently.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Unless explicitly silenced.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+In the face of ambiguity, refuse the temptation to guess.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+There should be one -- and preferably only one -- obvious way to do it.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Although that way may not be obvious at first unless you're Dutch.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Now is better than never.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Although never is often better than *right* now.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the implementation is hard to explain, it's a bad idea.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+If the implementation is easy to explain, it may be a good idea.
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+uncover<0>{
+\end_layout
+
+\end_inset
+
+Namespaces are one honking great idea -- let's do more of those!
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+How does it look like?
+\end_layout
+
+\begin_layout Standard
+\align center
+Let's see some code
+\end_layout
+
+\begin_layout BeginFrame
+Learn more
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size huge
+\begin_inset CommandInset href
+LatexCommand href
+target "http://docs.python.org/2/tutorial/"
+
+\end_inset
+
+
+\size default
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size larger
+邮件： rhcarvalho@gmail.com
+\end_layout
+
+\begin_layout Plain Layout
+
+\size larger
+网页： about.me/rhcarvalho
+\end_layout
+
+\begin_layout Plain Layout
+
+\size larger
+电话： 1 314 602 7634
+\end_layout
+
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "18col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset VSpace -0.6cm
+\end_inset
+
+
+\begin_inset Graphics
+	filename imgs/weixin-rodolfo.png
+	width 95text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Need in-company Python trainning? Drop me a line.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document

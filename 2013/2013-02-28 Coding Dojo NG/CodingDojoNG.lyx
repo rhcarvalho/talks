@@ -1,0 +1,752 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+\setbeamercovered{transparent}
+
+\usepackage{tikz}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language chinese-simplified
+\language_package default
+\inputencoding UTF8
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\font_cjk gbsn
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Coding Dojo -- New Generation
+\begin_inset Newline newline
+\end_inset
+
+
+\shape slanted
+\size larger
+Coding Kwoon
+\shape default
+\size default
+
+\begin_inset Argument
+status open
+
+\begin_layout Plain Layout
+Coding Kwoon
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+\begin_inset Graphics
+	filename imgs/dojorio_head.jpg
+	height 6em
+	BoundingBox 200bp 20bp 540bp 140bp
+	clip
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+Rodolfo
+\begin_inset space ~
+\end_inset
+
+Henrique
+\begin_inset space ~
+\end_inset
+
+Carvalho
+\begin_inset Newline newline
+\end_inset
+
+郝多福
+\begin_inset Argument
+status open
+
+\begin_layout Plain Layout
+Rodolfo 郝多福
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+中国北京，2013年2月28日
+\begin_inset Argument
+status open
+
+\begin_layout Plain Layout
+2013-02-28
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+%Map_of_Brazil_with_flag
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+setbeamertemplate{background}{
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+node[opacity=0.2]{
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+hspace{1.8cm}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+includegraphics[height=
+\backslash
+paperheight,keepaspectratio=true]{imgs/Map_of_Brazil_with_flag.pdf}
+\end_layout
+
+\begin_layout Plain Layout
+
+};
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{tikzpicture}
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+About me, this talk and you
+\end_layout
+
+\begin_layout Itemize
+Founder of the Coding Dojo Rio group in Brazil (2008)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Computer and Information Engineer (Federal University of Rio de Janeiro,
+ 2012)
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+This talk is a (very) short version of a new way to talk about Coding Dojos,
+ a deviation from the more traditional approach
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+setbeamertemplate{background}{}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The Foundation
+\end_layout
+
+\begin_layout Standard
+Practing principles and practices from Agile methodologies
+\begin_inset VSpace defskip
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "50col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename imgs/dojo_elements.png
+	width 100text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "30col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset VSpace -2.6cm
+\end_inset
+
+
+\size giant
++ TDD
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+The New Generation
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+How it evolved to what we can have now.
+\end_layout
+
+\begin_layout Plain Layout
+It is an evolutionary, interactive process -- there is no stabilished mark
+ for 
+\begin_inset Quotes eld
+\end_inset
+
+a new gen.
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Programming is not just about writing code.
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+The skills of a computer programmer are not limited to writing code
+\end_layout
+
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It is also about:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+communication
+\series default
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+sharing
+\series default
+ ideas and knowledge
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+comprehend that different people have 
+\series bold
+different points of view
+\series default
+ 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+different solutions to the same problem (we all have complementary backgrounds)
+\end_layout
+
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+expressing 
+\series bold
+intentions
+\series default
+ about some reality
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+I believe that learning without being able to communicate whatever it is
+ that you're learning has no point.
+\end_layout
+
+\begin_layout BeginFrame
+A Coding Kwoon
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Exercise
+\series default
+ a set of skills that we believe are important in the life of people (perhaps
+ not just programmers) 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+in my experience in Rio we had non-programmers participating as well
+\end_layout
+
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Learn
+\series default
+ more about yourself, share what you know and learn with others 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+and maybe you think you have nothing to share -- but I can prove you wrong
+\end_layout
+
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+The 
+\series bold
+environment
+\series default
+ you would like to have to perform better and happier in your daily job.
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Learn 
+\series bold
+new languages
+\series default
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Explore
+\series default
+ details of languages you already know 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+(becoming a master)
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Lessons learned
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+People
+\series default
+ have different skill levels
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Skills and 
+\series bold
+expressibility of ideas
+\series default
+ depends upon the language at hand
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Food & drinks
+\series default
+ are a great companion for programming
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+No matter how hard it is, keep it 
+\series bold
+constant
+\end_layout
+
+\begin_layout BeginFrame
+Learn more
+\end_layout
+
+\begin_layout Standard
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "80col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size larger
+邮件： rhcarvalho@gmail.com
+\end_layout
+
+\begin_layout Plain Layout
+
+\size larger
+网页： about.me/rhcarvalho
+\end_layout
+
+\begin_layout Plain Layout
+
+\size larger
+电话： 1 314 602 7634
+\end_layout
+
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "18col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset VSpace -0.6cm
+\end_inset
+
+
+\begin_inset Graphics
+	filename ../2013-02-28 Python in 15 minutes/imgs/weixin-rodolfo.png
+	width 95text%
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Want to have coding dojos and trainning in your company? Drop me a line.
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size largest
+Coding Kwoon Beijing
+\begin_inset Newline newline
+\end_inset
+
+is here!
+\begin_inset Newline newline
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset CommandInset href
+LatexCommand href
+target "https://groups.google.com/d/forum/kwoon-bj"
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\size default
+short link:
+\size larger
+ 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://goo.gl/N4SmJ"
+
+\end_inset
+
+
+\size default
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+Dojo Rio: 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://dojorio.org/about/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document
