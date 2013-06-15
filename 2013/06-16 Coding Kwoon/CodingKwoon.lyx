@@ -1,0 +1,933 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{Madrid}
+\usecolortheme{dolphin}
+\setbeamercovered{transparent}
+
+\usepackage{tikz}
+
+\setbeamertemplate{background}{
+\begin{tikzpicture}
+\node[opacity=0.1, inner sep=0pt]{
+\includegraphics[height=\paperheight,keepaspectratio=true]{imgs/pairprogramming.jpg}
+};
+\end{tikzpicture}
+}
+\end_preamble
+\use_default_options true
+\begin_modules
+logicalmkup
+\end_modules
+\maintain_unincluded_children false
+\language chinese-simplified
+\language_package default
+\inputencoding UTF8
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\font_cjk gbsn
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+\begin_inset Graphics
+	filename imgs/Coding Kwoon.pdf
+	lyxscale 50
+	width 8cm
+
+\end_inset
+
+
+\begin_inset Argument
+status open
+
+\begin_layout Plain Layout
+Coding Kwoon
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+Rodolfo
+\begin_inset space ~
+\end_inset
+
+Henrique
+\begin_inset space ~
+\end_inset
+
+Carvalho
+\begin_inset Newline newline
+\end_inset
+
+郝多福
+\begin_inset Argument
+status open
+
+\begin_layout Plain Layout
+Rodolfo 郝多福
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Date
+中国北京，2013年6月16日
+\begin_inset Argument
+status open
+
+\begin_layout Plain Layout
+2013-06-16
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+First, introduce myself shortly: Rodolfo 郝多福, Brazilian, Computer and Informatio
+n Engineer, founder of the Coding Dojo Rio.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Today's Timetable
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+begingroup
+\backslash
+tabcolsep=20pt
+\backslash
+def
+\backslash
+arraystretch{2.0}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="6" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0">
+<column alignment="center" valignment="top" width="0">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13:30 - 13:40
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+problem introduction
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+13:45 - 14:20
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+coding
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14:20 - 14:25
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+quick discussion
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+14:25 - 15:00
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+coding
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15:05 - 15:30
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+retrospective
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+15:30 - 
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset Formula $\infty$
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+continue on Coding Sunday
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status collapsed
+
+\begin_layout Plain Layout
+
+
+\backslash
+endgroup
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+New Concepts
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Tonight is full of new concepts.
+\end_layout
+
+\begin_layout Plain Layout
+I'll try to introduce as many new things as possible but, still, fasten
+ your seat belts...
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Coding Dojo
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+What is a Coding Dojo?
+\end_layout
+
+\begin_layout Plain Layout
+A 
+\begin_inset Quotes eld
+\end_inset
+
+dojo
+\begin_inset Quotes erd
+\end_inset
+
+ is a place for practicing martial arts.
+ Starting from the assumption that programmers tend to have no opportunity/time/
+venue to deliberatedly practice their skills, the coding dojo comes in as
+ a 
+\begin_inset Quotes eld
+\end_inset
+
+Agile book put in practice
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Coding Kwoon
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+So why Coding Kwoon?
+\end_layout
+
+\begin_layout Plain Layout
+Kwoon is 馆 in Cantonese, the equivalent Chinese term for dojo.
+ I wanted to express the freedom to shape this new activity from the ground
+ up.
+ Just like the Code Retreat is a Code Retreat (even though similar to a
+ Coding Dojo), the Coding Kwoon is a Coding Kwoon.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Social Environment
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+Perhaps you've never programmed in pairs, or worked in the same task as
+ other developers sitting around you.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Programming Environment
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+One of the 
+\begin_inset Quotes eld
+\end_inset
+
+problems
+\begin_inset Quotes erd
+\end_inset
+
+ you'll face tonight is dealing with some programming environment you've
+ never seen.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Pair Programming
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+In each coding session we will work in pairs on the proposed programming
+ challenge.
+\end_layout
+
+\begin_layout Plain Layout
+Pairs should swap roles during the session: pilot-copilot ping-pong.
+\end_layout
+
+\begin_layout Plain Layout
+Find a new partner for the second session.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Test-Driven Development
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+And maybe you've never written a single line of test code.
+\end_layout
+
+\begin_layout Plain Layout
+LIVE DEMO: the TDD development cycle.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+In a Coding Kwoon
+\end_layout
+
+\begin_layout Standard
+Axioms:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+People
+\series default
+ have different skill levels
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+You will likely learn things from your partner and also teach him some of
+ your skills.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+There're several ways to 
+\series bold
+express ideas
+\series default
+ about what you're trying to accomplish
+\end_layout
+
+\begin_layout Standard
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+We will have, simultaneously, different people working on different programming
+ languages, so expect outcomes to be different.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+You can:
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Exercise
+\series default
+ a set of skills
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Learn
+\series default
+ with others and 
+\series bold
+share
+\series default
+ what you know 
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+and maybe you think you have nothing to share -- but I can prove you wrong
+\end_layout
+
+\end_inset
+
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Learn 
+\series bold
+new languages
+\series default
+
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+Explore
+\series default
+ details of languages you already know
+\end_layout
+
+\begin_layout BeginFrame
+How it works
+\end_layout
+
+\begin_layout Standard
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+\begin_inset Graphics
+	filename imgs/coding_big_screen.jpg
+	lyxscale 50
+	width 100text%
+	groupId photos
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Coding Session
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\begin_inset Box Frameless
+position "t"
+hor_pos "c"
+has_inner_box 1
+inner_pos "t"
+use_parbox 0
+use_makebox 0
+width "45col%"
+special "none"
+height "1in"
+height_special "totalheight"
+status open
+
+\begin_layout Plain Layout
+
+\size giant
+\begin_inset Graphics
+	filename imgs/retrospective.jpg
+	lyxscale 50
+	width 100text%
+	groupId photos
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+Restrospective
+\end_layout
+
+\end_inset
+
+
+\begin_inset space \hfill{}
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Programming Challenge: Word Wrap
+\end_layout
+
+\begin_layout Standard
+You write a class called Wrapper, that has a single static function named
+ wrap that takes two arguments, a string, and a column number.
+ The function returns the string, but with line breaks inserted at just
+ the right places to make sure that no line is longer than the column number.
+ You try to break lines at word boundaries.
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Like a word processor, break the line by replacing the last space in a line
+ with a newline.
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout LyX-Code
+Wrapper.wrap(
+\begin_inset Quotes eld
+\end_inset
+
+I am a long sentence
+\begin_inset Quotes erd
+\end_inset
+
+, 9)
+\end_layout
+
+\begin_layout LyX-Code
+=> 
+\begin_inset Quotes eld
+\end_inset
+
+I am a
+\backslash
+nlong
+\backslash
+nsentence
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Considerations
+\end_layout
+
+\begin_layout Itemize
+Programming language
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Programming paradigm
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Do we need a class?
+\end_layout
+
+\end_deeper
+\begin_layout BeginFrame
+Warnings
+\end_layout
+
+\begin_layout Itemize
+No competition.
+\end_layout
+
+\begin_layout Itemize
+Focus on the process, not on solving the programming challenge.
+\end_layout
+
+\begin_layout Standard
+\begin_inset space ~
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Things to practice:
+\end_layout
+
+\begin_layout Itemize
+Pairing
+\end_layout
+
+\begin_layout Itemize
+TDD
+\end_layout
+
+\begin_layout Itemize
+Baby steps
+\end_layout
+
+\begin_layout Itemize
+Communication
+\end_layout
+
+\begin_layout BeginFrame
+Learn more
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size largest
+Coding Kwoon Beijing
+\begin_inset Newline newline
+\end_inset
+
+is here!
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset VSpace defskip
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+
+\size larger
+\begin_inset CommandInset href
+LatexCommand href
+target "http://bj.codingkwoon.com"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset VSpace defskip
+\end_inset
+
+
+\size larger
+
+\begin_inset CommandInset href
+LatexCommand href
+target "https://groups.google.com/d/forum/kwoon-bj"
+
+\end_inset
+
+
+\begin_inset Newline newline
+\end_inset
+
+
+\size default
+short link:
+\size larger
+ 
+\begin_inset CommandInset href
+LatexCommand href
+target "http://goo.gl/N4SmJ"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document
