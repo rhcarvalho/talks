@@ -1,0 +1,403 @@
+Go for Pythonistas
+PyCon PL
+11:00 17 Oct 2014
+Tags: go, golang, python
+
+Rodolfo Carvalho
+Python Lead Developer, Base Lab
+rodolfo@getbase.com
+http://rodolfocarvalho.net
+http://py.getbase.com
+
+
+# - Who used Go before?
+# This talk is a (not-so) quick intro to Go
+# How it is similar to Python is some aspects
+# How it is totally unlike Python in other aspects
+
+# Objective:
+# Motivate people to learn more about Go, educate about some coding
+# pitfalls and habits they can bring in to Python coding.
+
+*  
+.html html/fonts.html
+.html html/hello.html
+
+* Go is very boring
+
+* Go
+_"Go_is_more_about_software_engineering_than_programming_language_research."_
+
+- "It must work at scale"
+- "It must be familiar"
+- "It must be modern"
+#http://talks.golang.org/2012/splash.article
+
+(Rob Pike)
+
+.image img/rob.pike.jpg 250 _
+
+*  
+.html html/why.html
+
+* The Importance of Programming Literacy
+PyCon 2007
+Robert M. Lefkowitz, r0ml
+
+.image img/r0ml.png _ 300
+
+*  
+.html html/literacy.html
+# If computer programming is *the art of communicating through symbols ideas
+# about reality*, then having one more language in your arsenal gives you more
+# insights on how to express a reality and how to design programs.
+
+
+* syntax
+# Learning a new language is *NOT* about memorizing new _syntax_
+
+* repeating
+# Learning a new language is *NOT* about _repeating_ old patterns
+
+* expand
+# Learning a new language is about learning new ways of accomplishing things
+
+* express
+# Learning a new language is about improving your ability to express ideas
+
+
+*  
+.html html/understand.html
+
+* Go is fun and addictive
+
+* Like Python
+- Batteries included
+- Fits in your brain
+- Community
+
+.image img/gopher_baterries.png _ 200
+
+* Let's Go
+
+List popular repos from GitHub
+
+.play code/github-search.go /func main/,/^}/
+
+* Code with us @ Base stand
+.image img/base-logo.png
+.image img/grodniewicz.jpg 300 _
+
+
+* Go
+
+Like C
+
+- Statically typed
+- Fast
+- Easy to distribute
+
+.image img/pyinstaller.png
+
+Nothing really new, but
+
+- Great tools
+- Concurrency primitives
+
+
+* Let's Go again
+.play code/hello.go
+
+* Packages
+
+    package main
+ 
+    package json
+ 
+    package amqp
+
+- _"Namespaces_are_one_honking_great_idea_--_let's_do_more_of_those!"_
+- package != module != file
+
+
+* Imports
+
+    import "fmt"
+    import "net/http"
+    import "encoding/json"
+ 
+    import (
+        "fmt"
+        "net/http"
+        "encoding/json"
+    )
+
+`go`get`
+
+    import "github.com/rhcarvalho/basecrm"
+
+
+* Exports
+
+- Public = Upper case
+
+    http.Get(...)
+    json.NewDecoder(...)
+
+    dec := json.NewDecoder(resp.Body)
+    dec.Decode()
+
+- private = lower case
+
+    checkErr(...)
+    sr.print()
+
+    // cannot access from outside
+    http.defaultUserAgent      // private const
+    http.parseRequestLine(...) // private func
+
+
+* No more
+
+    class Foo:
+        def __i_am_very_private(self):
+            obj._please_dont_call_me(hack, it)
+
+
+* Basic types
+
+    bool
+
+    string
+
+    int  int8  int16  int32  int64
+    uint uint8 uint16 uint32 uint64 uintptr
+
+    byte // alias for uint8
+
+    rune // alias for int32
+         // represents a Unicode code point
+
+    float32 float64
+
+    complex64 complex128
+
+    array slice map struct interface
+
+
+* Functions
+.play code/functions.go
+
+
+* Type definitions
+.code code/github-search.go /typedefs/,/-typedefs/
+
+
+* Multiple assignment
+.code code/github-search.go /massign/,/-massign/
+
+
+* GitHub API
+.image img/github-search-api.png 510 _
+
+
+* HTTP request
+.code code/github-search.go /req/,/-req/ HLreq
+
+Error handling
+
+.code code/github-search.go /func checkErr/,/^}/
+
+* Request in Python
+
+- _"Explicit_is_better_than_implicit."_
+
+    import requests
+    resp = requests.get("https://api.github.com/search/repositories?q=...")
+    resp.json()
+
+
+* If it can break, it will break
+
+    >>> import requests
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ImportError: No module named requests
+
+
+* If it can break, it will break
+
+    >>> resp = requests.get("https://api.github.com/search/repositories?q=...")
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      ...
+      ...
+    requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.github.com', port=443):
+    Max retries exceeded with url: /search/repositories?q=...
+    (Caused by <class 'socket.gaierror'>: [Errno 8] nodename nor servname provided, or not known)
+
+
+* If it can break, it will break
+
+    >>> resp.json()
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+      ...
+      ...
+    ValueError: No JSON object could be decoded
+
+
+* Pattern #1: htfe
+- Every programmer produces errors, no exceptions :-)
+- Handle errors *explicitly*
+- Return ASAP
+- Use multiple return values
+- Pass errors around
+
+
+* Pattern #2: defer
+.code code/github-search.go /http.Get/,/-req/ HLdefer
+
+- Context managers
+
+    f = open("hello.txt")
+    try:
+        for line in f:
+            print line,
+    finally:
+        f.close()
+
+==
+
+    with open('some.file') as f:
+    for line in f:
+        print line,
+
+
+* Not really context managers
+- No exceptions
+
+.play code/defer.go
+
+
+* Decoding JSON
+.image img/github-search-result.png 510 _
+
+
+* Decoding JSON
+.code code/github-search.go /json OMIT/,/-json/
+#.code code/github-search.go /type/+1,/^\)/-1
+
+
+* Github Search meets Python
+.play code/python/github-search-std.py /begin/,$
+
+
+* Use requests
+.play code/python/github-search.py /begin/,$
+- _"There_should_be_one--_and_preferably_only_one_--obvious_way_to_do_it."_
+
+
+* Refactoring
+.play code/gh-search-refactored.go /func main/,/^}/ HLrefactor
+
+* Refactoring
+.play code/gh-search-refactored.go /search OMIT/,/-search/
+
+
+* Let's do more
+.image img/github2.png 550 _
+
+
+* Loop
+
+.code code/loop.go /func loopC/+1,/^}/-1
+.play code/loop.go /func loopRange/+1,/^}/-1
+
+Or
+
+.code code/loop.go /func loopWhile/+1,/^}/-1
+.code code/loop.go /func loopInf/+1,/^}/-1
+
+
+* Changes
+.code code/gh-search-user-repos.go /Repo struct/,/}/-1 HLrecent
+.play code/gh-search-user-repos.go /func main/,/^}/ HLrecent
+
+* Changes
+.code code/gh-search-user-repos.go /func recentUserRepos/,/^}/
+.play code/gh-search-user-repos.go /func printResponse/,/^}/ HLrecent
+
+
+* Concurrency
+
+* Goroutines
+.play code/go-limbo.go
+
+* Goroutines
+.play code/go-limbo-sleep.go
+
+* Channels
+.play code/go-limbo-ch.go
+
+- No " result = *yield*from* func(args) "
+
+* Channels
+.play code/go-limbo-ch2.go
+
+
+
+* Pipeline
+.image img/github-pipeline.png 550 _
+
+* Pipeline
+
+.code code/gh-search-pipeline.go /func stage1/,/^}/
+.code code/gh-search-pipeline.go /func stage2/,/^}/
+
+* Pipeline
+
+.code code/gh-search-pipeline.go /type GitHubSearchQuery/,/^}/
+.play code/gh-search-pipeline.go /func main/,/^}/
+
+
+
+
+#* Loop
+#.play code/functions2.go /func/,$
+#
+#
+#* Type definitions
+#.code code/types-and-methods.go /^type/,/-types/
+#
+#
+#* Methods
+#.code code/types-and-methods.go /^func/,/-methods/
+#
+#
+#* Run
+#.play code/types-and-methods.go /^func main/,/^}/
+
+
+
+
+* More
+
+* Interfaces
+
+- Static typed duck typing!
+- No more `__magic_method__`
+
+* Docstrings :)
+* Testing
+* Struct embedding
+* Mutexes
+* Methods
+* Zero values
+* Cannot compile with unused imports
+
+
+
+* Call to action: learn languages!
+
+* What are your questions?
