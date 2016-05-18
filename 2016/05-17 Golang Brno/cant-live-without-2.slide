@@ -1,0 +1,97 @@
+The Go features I can't live without, 2nd round
+
+Rodolfo Carvalho
+Red Hat
+rhcarvalho@gmail.com
+http://rodolfocarvalho.net
+
+* Previously
+
+1. *Simplicity*
+2. Single dispatch
+3. Capitalization
+4. gofmt
+5. godoc
+6. No exceptions
+7. Table-Driven Tests
+8. Interfaces
+
+* 9
+* First-class functions
+
+In Go, functions are first-class citizens.
+
+You can take them as argument, return as value, assign to variables.
+
+Trivial, but not all languages have it... Bash nightmares!
+
+
+* 10
+* Fully qualified imports
+
+Easy to tell "where does this package come from?"
+
+
+* 11
+* Static typing with type inference
+
+- Stutter-fee static typing
+- Let the compiler type check
+- Easier refactors
+
+
+* 12
+* Speed
+
+# as Rob mentioned, this is a weak feature
+- Compilation
+- Execution
+- Minimal boilerplate
+
+No need for build scripts, header files, XML files, etc.
+
+Compiled language that feels like scripting*
+# OpenShift manages to give >60s build times :(
+
+
+* 13
+* Metaprogramming
+
+There are many Go programs that write Go programs:
+`gofix`, `gofmt`, `goimports`, `stringer`, etc
+
+- But no macros
+
+
+* 14
+* Static binaries
+
+Statically linked binaries, easy to deploy/distribute
+
+
+* 15
+* Cross-compilation
+
+Develop/build on your preferred platform, deploy anywhere
+
+Platforms
+- Linux
+- Darwin
+- Windows
+- BSD
+- NaCl
+- Android
+
+Architectures
+- amd64
+- x86
+- arm
+- ...
+
+
+* 16
+* Go Proverbs
+
+"The Zen of Go"
+
+http://www.gregosuri.com/2015/12/04/go-proverbs-illustrated/
