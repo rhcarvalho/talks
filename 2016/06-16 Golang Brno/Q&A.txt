@@ -1,0 +1,31 @@
+Questions for a game in the end of the meetup.
+
+1. Which one of the sentences below is TRUE?
+  a. In Go, a programmer must always declare types explicitly.
+  b. Static linking a program in Go allows it to run in any platform.
+  [c]. Functions can be assigned to variables.
+  d. Compilation time is getting better with every new Go release.
+
+2. Fully qualified imports allow tooling to:
+  a. Compile programs quickly.
+  [b]. Download source code from the Internet.
+  c. Download and install the appropriate version of dependencies.
+  d. Cross-compile programs to multiple platforms and architectures.
+
+3. Which of these IS NOT one of the Go Proverbs?
+  a. Make the zero value useful.
+  [b]. A little dependency is better than a little copying.
+  c. Cgo is not Go.
+  d. Clear is better than clever.
+
+4. Which of these IS one of the Go Proverbs?
+  a. The zero value is not useful.
+  b. The bigger the interface, the better the abstraction.
+  c. Errors are good.
+  [d]. Don't communicate by sharing memory, share memory by communicating.
+
+5. Metaprogramming in Go is achieved via:
+  [a]. Programs that write programs.
+  b. Generics.
+  c. Generic programs that integrate with IDEs.
+  d. Super-classes and inheritance.
