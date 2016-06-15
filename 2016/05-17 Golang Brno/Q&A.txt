@@ -1,0 +1,10 @@
+Questions for a game in the end of the meetup.
+
+1. Does Go lack features because the language creators are lazy?
+(NO, that's by design to make a simple language with orthogonal features)
+
+2. Is Go boring?
+(YES, it is very boring)
+
+3. In Go, interfaces tend to have many methods.
+(NO, it is advisable to use small interfaces and compose them when needed)
