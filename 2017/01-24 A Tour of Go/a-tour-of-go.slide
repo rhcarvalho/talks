@@ -1,0 +1,209 @@
+A Tour of Go
+Workshop @ Golang Brno meetup #4
+24 Jan 2017
+
+Rodolfo Carvalho
+Red Hat
+rhcarvalho@gmail.com
+http://rodolfocarvalho.net
+https://www.facebook.com/CodingDojoBrno/
+
+* A Tour of Go workshop
+
+Objectives:
+
+- Fun & enjoyment
+- First contact with Go
+- Close gaps
+- Introduction to automated testing
+- Networking
+
+Note: the name of the language is *Go*, the website is [[https://golang.org/][golang.org]]
+
+* Introduction
+
+Let's get to know each other:
+
+- Name
+- Occupation
+- Programming experience (including or not Go)
+
+* Agenda
+
+- A Tour of Go
+- The `go` tool
+- The `testing` package
+- Coding Dojo
+- Retrospective
+
+* Rules
+
+- Ask questions
+- Bring questions to the group
+- Play with examples (run, modify, run, ...)
+
+And...
+
+- Work in pairs
+- Pair with someone you met for the first time
+- Alternate who controls the keyboard
+
+* A Tour of Go
+
+- Online
+
+.link https://tour.golang.org
+
+- Offline
+
+  go tool tour
+
+- Keyboard shortcuts
+
+  PageUp / PageDown : previous / next
+  Ctrl+Enter        : format
+  Shift+Enter       : run
+
+- Skip the exercises, we'll go back to them later
+- We will pause after the "Basics"
+
+: Average time to do the tour
+: Basics: Packages, variables, and functions. (20')
+: Basics: Flow control statements: for, if, else, switch and defer (15~20')
+: Basics: More types: structs, slices, and maps. (30~35')
+: Methods and interfaces (20~40')
+: Concurrency (30')
+
+* The go tool
+
+- a tool for managing Go source code
+
+  $ go
+  ...
+
+  The commands are:
+
+          build       compile packages and dependencies
+          doc         show documentation for package or symbol
+          fmt         run gofmt on package sources
+          run         compile and run Go program
+          test        test packages
+          ...
+
+* go test
+
+- automates testing packages
+- recompiles each package along with any files with names matching the pattern "*_test.go"
+- `go`test` with no arguments compiles and tests the package with source in the current directory
+
+* The testing package
+
+  $ go doc testing
+  ... provides support for automated testing of Go packages. (...) used in
+  concert with the ``go test'' command, which automates execution of any
+  function of the form
+
+    func TestXxx(*testing.T)
+
+  ...
+
+* Some methods of testing.T
+
+  $ go doc testing.T
+
+.caption
+
+  func (c *T) Fail()
+  func (c *T) FailNow()
+
+.caption
+
+  func (c *T) Log(args ...interface{})
+  func (c *T) Logf(format string, args ...interface{})
+
+.caption
+
+  func (c *T) Error(args ...interface{})
+  func (c *T) Errorf(format string, args ...interface{})
+
+.caption
+
+  func (c *T) Fatal(args ...interface{})
+  func (c *T) Fatalf(format string, args ...interface{})
+
+: Be brief, just focus on Errorf = Fail + Logf
+
+* A minimal test file template
+
+foo_test.go
+
+  package foo
+
+  import "testing"
+
+  func TestFoo(t *testing.T) {
+  	got := Foo()
+  	want := "bar"
+  	if got != want {
+  		t.Errorf("Foo() = %v, want %v", got, want)
+  	}
+  }
+
+* Table testing
+
+.link https://github.com/golang/go/wiki/TableDrivenTests
+
+.play -edit code/tree_test.go /func TestSame/,/^}/
+
+* Coding Dojo
+
+- Change pairs
+- Work on exercises using TDD
+- Discuss different implementations with your partner
+
+TDD rules:
+
+- Write a complete test case
+- See it FAIL
+- Make it PASS
+- Refactor
+
+* Exercises
+
+Basics:
+
+- [[https://tour.golang.org/flowcontrol/8][Loops and Functions: Sqrt]]
+- [[https://tour.golang.org/moretypes/18][Slices: Pic]]
+- [[https://tour.golang.org/moretypes/23][Maps: WordCount]]
+- [[https://tour.golang.org/moretypes/26][Fibonacci closure]]
+
+* Exercises
+
+Methods and interfaces:
+
+- [[https://tour.golang.org/methods/18][Stringers: IPAddr]]
+- [[https://tour.golang.org/methods/20][Errors: Sqrt]]
+- [[https://tour.golang.org/methods/22][Readers: infinite stream of 'A']]
+- [[https://tour.golang.org/methods/23][rot13Reader]]
+- [[https://tour.golang.org/methods/25][Images]]
+
+* Exercises
+
+Concurrency:
+
+- [[https://tour.golang.org/concurrency/7][Equivalent Binary Trees]]
+- [[https://tour.golang.org/concurrency/10][Web Crawler]]
+
+* Coding Dojo Brno
+
+If you want to practice more TDD, we have weekly meetings:
+
+.link https://www.facebook.com/CodingDojoBrno
+
+* Retrospective
+
+Code retreat style...
+
+- What, if anything, did you learn today?
+- What, if anything, surprised you today?
+- What, if anything, would you like to do with Go in the future?
