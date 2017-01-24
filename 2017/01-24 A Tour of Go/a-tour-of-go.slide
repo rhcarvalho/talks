@@ -6,7 +6,7 @@ Rodolfo Carvalho
 Red Hat
 rhcarvalho@gmail.com
 http://rodolfocarvalho.net
-https://www.facebook.com/CodingDojoBrno/
+https://dojo-brno.github.io
 
 * A Tour of Go workshop
 
@@ -198,7 +198,7 @@ Concurrency:
 
 If you want to practice more TDD, we have weekly meetings:
 
-.link https://www.facebook.com/CodingDojoBrno
+.link https://www.facebook.com/CodingDojoBrno facebook.com/CodingDojoBrno
 
 .image http://chart.apis.google.com/chart?cht=qr&chs=300x300&chl=https%3A//www.facebook.com/CodingDojoBrno/events/&chld=H|0
 
