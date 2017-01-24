@@ -177,6 +177,17 @@ Basics:
 - [[https://tour.golang.org/moretypes/23][Maps: WordCount]]
 - [[https://tour.golang.org/moretypes/26][Fibonacci closure]]
 
+* What if I don't have Go installed?
+
+You can code online using [[https://play.golang.org][The Go Playground]]. Running tests there can be
+accomplished with a little trick, as in this example:
+
+.link https://play.golang.org/p/UhY6SqAdCu
+
+In the future, it may become easier to run tests in the playground:
+
+.link https://github.com/golang/go/issues/6511
+
 * Exercises
 
 Methods and interfaces:
