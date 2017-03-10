@@ -1,18 +1,27 @@
-.slides > article.current {
-  background-image: url("redhat-logo.png"), url("redhat-background.png");
-  background-size: 82px, 1100px 700px;
-  background-repeat: no-repeat, no-repeat;
-  background-position: 1000px 658px, 0 0 !important;
-}
+@media screen {
+  .slides > article.current {
+    background-image: url("redhat-logo.png"), url("redhat-background.png");
+    background-size: 82px, 1100px 700px;
+    background-repeat: no-repeat, no-repeat;
+    background-position: 1000px 658px, 0 0 !important;
+  }
 
-.slides > article.past, .slides > article.next {
-  opacity: 0.2;
-}
+  .slides > article.past, .slides > article.next {
+    opacity: 0.2;
+  }
 
-.slides > article.far-past, .slides > article.far-next {
-  opacity: 0.1;
+  .slides > article.far-past, .slides > article.far-next {
+    opacity: 0.1;
+  }
 }
 
 h1 {
   font-size: 53px !important;
+}
+
+@media print {
+  /* Remove explicit links */
+  a:link:after, a:visited:after {
+    content: none !important;
+  }
 }
