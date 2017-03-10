@@ -1,0 +1,21 @@
+<pre>
+<code class="yaml">
+---
+- name: Launch containers
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  tasks:
+  - name: Ensure containers are running
+    docker_container:
+      name: "{{item}}"
+      image: centos:7
+      command: sleep infinity
+      state: started
+    with_items:
+    - master-container
+    - node-container-1
+    - node-container-2
+</code>
+</pre>

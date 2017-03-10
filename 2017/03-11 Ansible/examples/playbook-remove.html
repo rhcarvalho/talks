@@ -1,0 +1,19 @@
+<pre>
+<code class="yaml">
+---
+- name: Cleanup containers
+  hosts: localhost
+  connection: local
+  become: no
+  gather_facts: no
+  tasks:
+  - name: Ensure containers are removed
+    docker_container:
+      name: "{{item}}"
+      <strong style="background:#ff0">state: absent</strong>
+    with_items:
+    - master-container
+    - node-container-1
+    - node-container-2
+</code>
+</pre>

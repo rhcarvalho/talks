@@ -1,0 +1,25 @@
+<pre>
+<code class="ini">
+[masters]
+master-container
+
+[nodes]
+node-container-1
+node-container-2
+
+[etcd]
+[lb]
+[nfs]
+
+[OSEv3:children]
+masters
+nodes
+etcd
+lb
+nfs
+
+[OSEv3:vars]
+deployment_type=origin
+<span style="background:#ff0">ansible_connection=docker</span>
+</code>
+</pre>

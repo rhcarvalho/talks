@@ -1,0 +1,266 @@
+Automation with Ansible and Containers
+PyCon SK
+11 Mar 2017
+Tags: ansible, automation, containers, python
+
+Rodolfo Carvalho
+Software Engineer, Red Hat
+rhcarvalho@redhat.com
+http://rodolfocarvalho.net
+
+: Ansible is an open source automation platform, written in Python, that can be used for configuration-management, application deployment, cloud provisioning, ad-hoc task-execution, multinode orchestration and so on. This talk is an introduction to Ansible for beginners, including tips like how to use containers to mimic multiple machines while iteratively automating some tasks or testing.
+
+* What is Ansible
+
+.html assets/custom.html
+
+- Automation language
+- Automation engine
+
+&
+
+- Simple: install, configure, understand
+- Agentless, uses SSH*
+- Extensible
+- Open Source
+- Written in Python!
+
+: Though Ansible is normally associated with connecting to hosts via SSH, it supports different transports via Connection Plugins and for example can connect natively to Docker containers.
+
+* What can we do with Ansible
+
+- Configuration Management
+- Application Deployments
+- Provisioning
+- Orchestration
+- Continuous Delivery
+
+: The automation language and engine are flexible enough that the limit is our imagination.
+
+* My story with Ansible
+
+- openshift-ansible
+- Ansible from a programmer's perspective
+- Learning curve
+- Beyond the basics
+
+: I work for 2 years on OpenShift. Late last year I started to work on diagnostic tooling to support the installation and maintenance of clusters.
+: I am not a sysadmin, have familiarity with the Python language, but not with managing infrastructure.
+: In less than a month I went from knowing nothing to getting familiar with the basic concepts and being able to develop on top of Ansible using plugins.
+: It is easy to learn the basics, but still requires experience to know how to handle common situations.
+: I don't claim to be an expert ;)
+
+.image assets/Icon_RH_Diagram_Financial_RGB_Shiny.svg 160 _
+
+
+* The basics
+
+.image assets/ansible.svg 120 _
+
+- Inventory
+
+: Targets of automation
+
+- Task
+
+: The minimum unit of action
+
+- Play
+
+: List of tasks applied to a host or group
+
+- Playbook
+
+: List of plays
+
+* The basics
+
+An inventory typically lists remote hosts, either bare metal or VMs.
+
+.image assets/Icon_RH_Hardware_Datacenter-A_RGB_Shiny.svg 120 _
+
+Testing is hard, make it less painful.
+
+Ansible ♥ Containers!
+
+.image assets/Icon_RH_Software_Container-Deployed_RGB_Shiny.svg 140 _
+
+: Comparing to boring code that runs in a single thread/process in one computer, testing infrastructure is a lot more complicated, and there are tons of things to go wrong!
+: Playing with Ansible and testing functionality becomes a lot more productive with containers.
+
+* Inventory
+
+: List of targets
+: Can reference machines by IP, hostname, container name!
+
+.html examples/inventory.html
+
+* Playbooks
+
+- YAML files describing desired state
+
+.html examples/playbook-start.html
+
+* Running the playbook
+
+  $ ansible-playbook -i hosts playbooks/start-containers.yml
+
+  PLAY [Launch containers] *******************************************************
+
+  TASK [Ensure containers are running] *******************************************
+  changed: [localhost] => (item=master-container)
+  changed: [localhost] => (item=node-container-1)
+  changed: [localhost] => (item=node-container-2)
+
+  PLAY RECAP *********************************************************************
+  localhost                  : ok=1    changed=1    unreachable=0    failed=0
+
+
+* Removing containers
+
+.html examples/playbook-remove.html
+
+* Removing containers
+
+  $ ansible-playbook -i hosts playbooks/remove-containers.yml
+
+  PLAY [Cleanup containers] ******************************************************
+
+  TASK [Ensure containers are removed] *******************************************
+  changed: [localhost] => (item=master-container)
+  changed: [localhost] => (item=node-container-1)
+  changed: [localhost] => (item=node-container-2)
+
+  PLAY RECAP *********************************************************************
+  localhost                  : ok=1    changed=1    unreachable=0    failed=0
+
+
+* More concepts
+
+- Modules
+- Roles
+- Ansible Galaxy
+
+Ansible ships with more than 700 modules.
+
+Roles is a standard way to organize playbooks.
+
+Galaxy is a free site for finding, downloading, and sharing community developed roles.
+
+* Ansible Modules ♥ Python!
+
+: Modules are often written in Python
+: Technically, the API is based JSON via stdin and stdout, so any language could be used.
+: Python is the pragmatic choice.
+
+.html examples/module.html
+
+* Modules
+
+Modules are copied to the target hosts, then executed in the targets.
+
+  $ ansible -i hosts all -m ping -a data=pyconsk
+  master-container | SUCCESS => {
+      "changed": false,
+      "ping": "pyconsk"
+  }
+  node-container-1 | SUCCESS => {
+      "changed": false,
+      "ping": "pyconsk"
+  }
+  node-container-2 | SUCCESS => {
+      "changed": false,
+      "ping": "pyconsk"
+  }
+
+  
+
+  $ ansible -i hosts masters -m command -a 'rm -rf /'
+  master-container | FAILED | rc=1 >>
+  rm: it is dangerous to operate recursively on '/'
+  rm: use --no-preserve-root to override this failsafe
+
+
+* To infinity… and beyond!
+
+.image assets/buzz.png
+
+
+* Plugins
+
+.link https://www.ansible.com/blog/how-to-extend-ansible-through-plugins
+
+- Action
+- Callback
+- Connection
+
+- Others...
+
+* Action Plugins
+
+.html examples/action-plugin.html
+
+* Action Plugins
+
+Run on the control machine, giving great control over how to run modules.
+
+  $ ansible -i hosts nodes -m fail
+  node-container-1 | FAILED! => {
+      "changed": false,
+      "failed": true,
+      "msg": "Failed as requested from task"
+  }
+  node-container-2 | FAILED! => {
+      "changed": false,
+      "failed": true,
+      "msg": "Failed as requested from task"
+  }
+
+
+* Callback Plugins
+
+.html examples/callback-plugin.html
+
+* Callback Plugins
+
+React to events which occur during the execution of playbooks.
+Use it to customize output.
+
+  $ ANSIBLE_CALLBACK_WHITELIST=timer ansible-playbook -i hosts playbooks/start-containers.yml
+
+  PLAY [Launch containers] *******************************************************
+
+  TASK [Ensure containers are running] *******************************************
+  ok: [localhost] => (item=master-container)
+  ok: [localhost] => (item=node-container-1)
+  ok: [localhost] => (item=node-container-2)
+
+  PLAY RECAP *********************************************************************
+  localhost                  : ok=1    changed=0    unreachable=0    failed=0
+
+  Playbook run took 0 days, 0 hours, 0 minutes, 1 seconds
+
+
+* Conclusion
+
+- It's 2017, go learn Ansible!
+- Automate
+- Programming the infrastructure
+- Testing is hard, but don't give up
+- Python is a fundamental tool in your toolbox
+
+* Red Hat Czech
+
+- Brno - the biggest engineering hub globally
+- 1100 employees (including 85 interns) in 3 buildings
+- Software Development, QE, Technical Writing, Technical Support, BI
+- Small engineering office in Prague
+
+We're hiring!
+
+- Python is one of the most used programming language
+- Open positions in RHEL Platform Team, QE, Release Engineering, Containers, DevOps (both Development and SysAdmin), OpenStack
+
+*  
+
+.background assets/rh0071-product-architecture-diagram-us98554rm-201608.png

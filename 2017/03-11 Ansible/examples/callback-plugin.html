@@ -1,0 +1,24 @@
+<pre>
+<code class="python">
+# ansible/plugins/callback/timer.py
+from datetime import datetime
+from ansible.plugins.callback import CallbackBase
+
+class CallbackModule(CallbackBase):
+    """This callback module tells you how long your plays ran for."""
+    CALLBACK_VERSION = 2.0
+    CALLBACK_TYPE = 'aggregate'
+    CALLBACK_NAME = 'timer'
+    CALLBACK_NEEDS_WHITELIST = True
+
+    def __init__(self):
+        super(CallbackModule, self).__init__()
+        self.start_time = datetime.now()
+
+<div style="background:#ff0">    def v2_playbook_on_stats(self, stats):
+        end_time = datetime.now()
+        runtime = end_time - self.start_time
+        self._display.display("Playbook run took %s days, %s hours, %s minutes, %s seconds" % \
+            (self.days_hours_minutes_seconds(runtime)))</div>
+</code>
+</pre>
