@@ -24,6 +24,7 @@ http://rodolfocarvalho.net
 - Extensible
 - Open Source
 - Written in Python!
+- Great community -- 2,588 contributors
 
 : Though Ansible is normally associated with connecting to hosts via SSH, it supports different transports via Connection Plugins and for example can connect natively to Docker containers.
 
