@@ -18,9 +18,11 @@ https://dojo-brno.github.io
 
 * Go Releases
 
+.html html/css.html
+
 .caption [[https://golang.org/doc/devel/release.html]]
 
-.image img/releases.png 500 _
+.html html/releases.html
 
 : Go was announced publicly on 2009-11-10
 : Go1 was released 2012-03-28, 2 years and 4 months later
@@ -31,30 +33,17 @@ https://dojo-brno.github.io
 
 .link https://golang.org/doc/go1compat
 
-Go 1 defines two things: first, the *specification*of*the*language*; and second, the specification of a set of core APIs, the "*standard*packages*" of the Go library.
-
-It is intended that programs written to the Go 1 specification will continue to compile and run correctly, unchanged, over the lifetime of that specification.
-
-Compatibility is at the source level.
+.html html/promise-1.html
 
 
 * Go 1 promise
 
-There are a number of ways in which a program that compiles and runs today may fail to do so after a future point release:
-
-- Security
-- Unspecified behavior
-- Specification errors
-- Bugs
-- Unkeyed struct literals
-- Methods creating conflict
-- Dot imports creating conflict
-- Use of package `unsafe`
+.html html/promise-2.html
 
 
 * Go 1 promise
 
-Although these expectations apply to Go 1 itself, we hope similar considerations would be made for the development of externally developed software based on Go 1.
+.html html/promise-3.html
 
 : What's interesting about the promise is that Go tried to influence the community to follow a similar compatibility promise.
 : To this day we are still trying to figure out how we deal with change. First roll-it-yourself, then the vendor experiment, then dep and now the vgo experiment.
@@ -94,20 +83,12 @@ Only minor changes to the language:
 
 .link https://blog.golang.org/constants
 
-When designing Go, we decided to avoid this minefield [of numeric bugs in C code] by mandating that there is *no* mixing of numeric types.
-
-This strictness [...] sometimes requires programmers to decorate their code with clumsy numeric conversions to express their meaning clearly.
-
-[...] numeric constants work differently from how they behave in other C-like languages.
-
-In short, constants in Go just work, most of the time anyway.
+.html html/constants-1.html
 
 
 * Untyped constants
 
-The concept of _untyped_constants_ in Go means that all the numeric constants, whether integer, floating-point, complex, or even character values, live in a kind of unified space.
-
-It's when we bring them to the computational world of *variables*, *assignments*, and *operations* that the actual types matter.
+.html html/constants-2.html
 
 
 * Untyped constants
