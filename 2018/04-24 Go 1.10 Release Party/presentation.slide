@@ -1,0 +1,494 @@
+Go 1.10 Release Party
+PDX Go
+24 Apr 2018
+
+Rodolfo Carvalho
+AWS Elemental
+rhcarvalho@gmail.com
+http://rodolfocarvalho.net
+https://dojo-brno.github.io
+
+
+* Go
+
+: Assess "where" people are in the "adoption curve"
+: Who uses Go at work, at school, at home, ...
+: What is Go used for? Web servers, command line tools, ...
+
+
+* Go Releases
+
+.html html/css.html
+
+.caption [[https://golang.org/doc/devel/release.html]]
+
+.html html/releases.html
+
+: Go was announced publicly on 2009-11-10
+: Go1 was released 2012-03-28, 2 years and 4 months later
+: and with the 1.0's release came the promise...
+
+
+* Go 1 promise
+
+.link https://golang.org/doc/go1compat
+
+.html html/promise-1.html
+
+
+* Go 1 promise
+
+.html html/promise-2.html
+
+
+* Go 1 promise
+
+.html html/promise-3.html
+
+: What's interesting about the promise is that Go tried to influence the community to follow a similar compatibility promise.
+: To this day we are still trying to figure out how we deal with change. First roll-it-yourself, then the vendor experiment, then dep and now the vgo experiment.
+
+* Go 1.10
+
+Release Notes in [[https://golang.org/doc/go1.10]] fit in 14 letter pages!
+
+- Language Specification changes
+- `go` tool improvements
+- Standard Library
+- Ports
+- Runtime
+- `Cgo` improvements
+- Performance
+
+: Way too many things to cover in-depth!
+: I picked some that are interesting to me and that I can share examples.
+: Will talk a bit deeper about some things, less deep about others.
+
+❤️ Hope you will learn at least one new thing before the end of the talk ❤️
+
+
+* Spec changes
+* Spec changes
+
+: Remember the Go1 compatibility promise
+
+Only minor changes to the language:
+
+- shifts of untyped constants
+- relaxed method expressions grammar
+
+
+* Untyped constants
+* Untyped constants
+
+.link https://blog.golang.org/constants
+
+.html html/constants-1.html
+
+
+* Untyped constants
+
+.html html/constants-2.html
+
+
+* Untyped constants
+
+.link https://golang.org/ref/spec#Constants
+
+Default type determined by syntax; actual type defined by context:
+
+.play -edit code/const.go /^func main/+1,/^}/-1
+
+: Notice that the first group of literal constants assume default types.
+: And while one could think of the constant "c" being a float... it is in fact untyped, and the type in determined by context.
+
+
+* Shifting untyped constants
+
+If the left operand of a non-constant shift expression is an untyped constant,
+it is *first*converted* to the *type* it would *assume* if the shift expression
+were replaced by its left operand alone.
+
+.play -edit code/untypedconstshift.go /\[\]string/,/^}/-1
+
+  var a = make([]byte, 1.0<<s) // 1.0 has type int
+
+: https://go-review.googlesource.com/c/go/+/60230
+
+
+* Method expressions
+* Method expressions
+
+- [[https://golang.org/ref/spec#Method_expressions]]
+- [[https://golang.org/ref/spec#Method_sets]]
+
+.code code/methodexpr.go /^type T/,/^var t/
+
+.play -edit code/methodexpr.go /1 OMIT/,/^}/-1
+
+
+* Method expressions: relaxed grammar
+
+[[https://github.com/golang/go/issues/9060][#9060]] spec: remove unnecessary syntax restrictions for method expressions to match compiler
+
+.code code/methodexpr.go /2 OMIT/,/^}/-1
+
+[[https://github.com/golang/go/issues/22444][#22444]] cmd/compile: missing wrapper function for call of literal method expression
+
+  # command-line-arguments
+  relocation target go.struct { main.T }.Mv not defined
+  undefined: "go.struct { main.T }.Mv"
+
+
+* The go tool
+* The go tool
+
+- GOPATH optional since Go 1.8
+- New: GOROOT based on executable path
+- New: GOTMPDIR
+
+Installing and using Go is simpler than ever: *download*&*extract* anywhere.
+
+No need to set any environment variable! Most of the time.
+
+Some rough edges, e.g., `godoc` does not infer GOROOT [[https://github.com/golang/go/issues/23445][#23445]].
+
+: Now, more than ever, installing and using Go is simple and requires
+: no environment variables.
+: The once required GOPATH defaults to ~/go (since go1.8).
+
+
+* go build
+
+- Build caching ⚡️
+
+No need for `go`build`-i` (nor `go`test`-i`)
+
+: Go is known for fast builds. There used to be a distinction between go install
+: and go build (and go test) such that go install could avoid rebuilding code that
+: did not change. Now with the build cache, build times are uniformly faster.
+
+- Out-of-date packages
+
+Now detected purely based on the *content* of source files, specified
+*build*flags*, and *metadata* stored in the compiled packages. Modification
+times are no longer consulted or relevant.
+
+Removes the need for `go`build`-a`, most of the time.
+
+
+* go install
+
+Now installs only the packages and commands listed directly on the command line.
+
+Thanks to build caching, the very concept of installed packages may disappear in
+a future release.
+
+
+* go test
+
+- Test result caching ⚡️
+
+  $ go test crypto/rsa
+  ok      crypto/rsa      1.012s
+  $ go test crypto/rsa
+  ok      crypto/rsa      (cached)
+
+Tests are cached only when *successful*, run with an *explicit*list*of*packages* and
+using only a subset of the *-cpu*, *-list*, *-parallel*, *-run*, *-short*, and *-v* flags.
+
+*Files* and *environment*variables* used by the tests are checked.
+
+The idiomatic way to bypass test caching is to use *-count=1*.
+
+
+* Under the hood of test caching
+
+Go's [[https://github.com/golang/go/blob/master/src/internal/testlog/log.go][src/internal/testlog/log.go]] uses an [[https://golang.org/pkg/sync/atomic/#Value][`atomic.Value`]] to store a "logger".
+
+  // Package testlog provides a back-channel communication path
+  // between tests and package os, so that cmd/go can see which
+  // environment variables and files a test consults.
+  package testlog
+
+  import "sync/atomic"
+
+  type Interface interface {
+  	Getenv(key string)
+  	Stat(file string)
+  	Open(file string)
+  	Chdir(dir string)
+  }
+
+  var logger atomic.Value
+
+
+* Under the hood of test caching
+
+  func SetLogger(impl Interface) {
+  	if logger.Load() != nil {
+  		panic("testlog: SetLogger must be called only once")
+  	}
+  	logger.Store(&impl)
+  }
+
+  func Logger() Interface {
+  	impl := logger.Load()
+  	if impl == nil {
+  		return nil
+  	}
+  	return *impl.(*Interface)
+  }
+
+  func Getenv(name string) {
+  	if log := Logger(); log != nil {
+  		log.Getenv(name)
+  	}
+  }
+
+
+* go test
+
+- Includes `go`vet`
+
+  $ GOPATH=$(go env GOROOT)/src/cmd/go/testdata
+
+Before
+
+  $ go1.9.5 test vetpkg
+  ok      vetpkg  0.530s [no tests to run]
+
+: test + vet
+
+  $ go1.9.5 vet vetpkg
+  /usr/local/Cellar/go/1.10.1/libexec/src/cmd/go/testdata/src/vetpkg/b.go:6: missing argument for Printf("%d"): format reads arg 1, have only 0 args
+  exit status 1
+
+Now
+
+  $ go test vetpkg
+  # vetpkg
+  /usr/local/Cellar/go/1.10.1/libexec/src/cmd/go/testdata/src/vetpkg/b.go:6: Printf format %d reads arg #1, but call has only 0 args
+  FAIL    vetpkg [build failed]
+
+
+* go test
+
+- Improved coverage reports
+
+  go test -coverpkg=all -coverprofile cover.out ./...
+  go test -coverpkg=crypto/... -coverprofile cover.out crypto/...
+  go tool cover -html cover.out
+
+- Fail fast
+
+  go test -failfast
+
+- JSON output
+
+  go test -json
+
+
+* go doc
+
+Now functions returning []T or []*T group under type T, similar to functions
+returning T or *T:
+
+  $ go doc mail.Address
+  package mail // import "net/mail"
+
+  type Address struct {
+          Name    string // Proper name; may be empty.
+          Address string // user@domain
+  }
+      Address represents a single mail address. [...]
+
+
+  func ParseAddress(address string) (*Address, error)
+  func ParseAddressList(list string) ([]*Address, error)
+  func (a *Address) String() string
+
+
+* Standard Library
+
+* bytes
+
+.link https://go-review.googlesource.com/c/go/+/74510 CL 74510
+
+`Fields`, `FieldsFunc`, `Split`, and `SplitAfter` each already returned slices
+pointing into the same underlying array as its input.
+
+Go 1.10 changes each of the returned subslices *to* *have* *capacity* *equal*
+*to* *its* *length*, so that appending to a subslice will not overwrite adjacent
+data in the original input. This is also a "breaking change" in the behavior of
+these functions and you might need to update your code.
+
+  func Fields(s []byte) [][]byte
+
+Example:
+
+  fmt.Printf("Fields are: %q", bytes.Fields([]byte("  foo bar  baz   ")))
+  // Output: Fields are: ["foo" "bar" "baz"]
+
+
+* Slices, length and capacity
+
+.link https://blog.golang.org/go-slices-usage-and-internals
+
+.image https://blog.golang.org/go-slices-usage-and-internals_slice-struct.png
+.image https://blog.golang.org/go-slices-usage-and-internals_slice-2.png
+
+
+* Slicing syntax
+
+.link https://golang.org/ref/spec#Slice_expressions
+
+Simple slice expressions
+
+  a[low : high]
+
+Full slice expressions
+
+  a[low : high : max]
+
+
+* Slicing
+
+.play -edit code/slicing.go /^func main/+1,/^}/-1
+
+: Re-defining the capacity in s2 forces append to allocate memory and thus will
+: not change the original slice s.
+
+
+* encoding/json
+
+New Decoder method DisallowUnknownFields
+
+.play -edit code/json.go /^type/,$
+
+
+* math/rand
+
+New Shuffle function and Rand.Shuffle method
+
+  func Shuffle(n int, swap func(i, j int))
+  func (r *Rand) Shuffle(n int, swap func(i, j int))
+
+.play -edit code/shuffle.go /^func main/+1,/^}/-1
+
+
+* flag
+
+.code code/flags.go /BEGIN/,/END/
+
+Before 😕
+
+  $ go1.9.5 build -o program code/flags.go && ./program -h
+  Usage of ./program:
+    -s string
+          this is a description
+  that spans multiple lines
+    -x int
+          short description
+
+Go 1.10 👍
+
+  $ go build -o program code/flags.go && ./program -h
+  Usage of ./program:
+    -s string
+          this is a description
+          that spans multiple lines
+    -x int
+          short description
+
+
+* strings.Builder
+
+Replacement for `bytes.Buffer` when accumulating text into a string.
+Minimizes memory copying.
+
+.play -edit code/builder.go /^func main/+1,/^}/-1
+
+
+* net
+
+The `Conn` and `Listener` implementations now guarantee that when `Close`
+returns, the underlying file descriptor has been closed.
+
+  l, err := net.Listen("tcp", ":2000")
+  if err != nil {
+  	log.Fatal(err)
+  }
+  l.Close()
+  l, err = net.Listen("tcp", ":2000") // the port should be free to bind again
+  ...
+
+* os
+
+New `File` methods `SetDeadline`, `SetReadDeadline`, and `SetWriteDeadline` that
+allow setting I/O deadlines when the underlying file descriptor supports
+non-blocking I/O operations.
+
+The definition of these methods matches those in `net.Conn`.
+
+Also matching `net.Conn`, `File`'s `Close` method now guarantee that when
+`Close` returns, the underlying file descriptor has been closed.
+
+
+* unicode
+
+.image img/BitcoinSign.svg
+.caption Go 1.10 supports Unicode 10.0
+
+
+* More
+
+- See [[https://golang.org/doc/go1.10#library]].
+
+- Ports
+
+No new supported operating systems nor processor architectures.
+New assembler instructions and compiler improvements.
+See [[https://golang.org/doc/go1.10#ports]].
+
+- Cgo
+
+Fixed arbitrary code execution security hole. And more.
+See [[https://golang.org/doc/go1.10#cgo]].
+
+- Performance
+
+Most programs should run a bit faster, due to speedups in the garbage collector,
+better generated code, and optimizations in the core library.
+
+
+* Go 1.10.1
+* Go 1.10.1
+
+go1.10.1 (released 2018/03/28) includes fixes to the compiler, runtime, and the
+archive/zip, crypto/tls, crypto/x509, encoding/json, net, net/http, and
+net/http/pprof packages.
+
+See [[https://github.com/golang/go/issues?q=milestone%3AGo1.10.1]]
+
+
+* Recap
+
+- Go1 Compatibility Promise
+- Untyped Constants
+- Method Expressions
+- Build Caching
+- Test Caching
+- Slices
+- strings.Builder
+- ...
+
+What's your favorite thing about Go & Go 1.10? Let's chat about it!
+
+
+* Misc
+
+- [[https://godoc.org/golang.org/x/tools/present]]
+- `present`-as-a-Service: [[https://talks.godoc.org]]
+- Go Playground: [[https://play.golang.org]]
+- [[https://godoc.org/golang.org/x/build/version]]

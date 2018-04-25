@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['timeline']});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var container = document.getElementById('timeline');
+        var chart = new google.visualization.Timeline(container);
+        var dataTable = new google.visualization.DataTable();
+
+        dataTable.addColumn({type: 'string', id: 'ignored'});
+        dataTable.addColumn({type: 'string', id: 'Go Release'});
+        dataTable.addColumn({type: 'date', id: 'Start'});
+        dataTable.addColumn({type: 'date', id: 'End'});
+        dataTable.addRows([
+          // ['', 'go1.10.1', new Date('2018-03-28'), new Date('2018-04-24')],
+          ['', 'go1.10',   new Date('2018-02-16'), new Date('2018-04-24')],
+          ['', 'go1.9',    new Date('2017-08-24'), new Date('2018-02-16')],
+          ['', 'go1.8',    new Date('2017-02-16'), new Date('2017-08-24')],
+          ['', 'go1.7',    new Date('2016-08-15'), new Date('2017-02-16')],
+          ['', 'go1.6',    new Date('2016-02-17'), new Date('2016-08-15')],
+          ['', 'go1.5',    new Date('2015-08-19'), new Date('2016-02-17')],
+          ['', 'go1.4',    new Date('2014-12-10'), new Date('2015-08-19')],
+          ['', 'go1.3',    new Date('2014-06-18'), new Date('2014-12-10')],
+          ['', 'go1.2',    new Date('2013-12-01'), new Date('2014-06-18')],
+          ['', 'go1.1',    new Date('2013-05-13'), new Date('2013-12-01')],
+          ['', 'go1',      new Date('2012-03-28'), new Date('2013-05-13')],
+          // ['', 'pre-go1',  new Date('2009-11-10'), new Date('2012-03-28')],
+        ]);
+
+        var options = {
+          timeline: {
+            showRowLabels: false,
+            groupByRowLabel: false,
+          },
+        };
+
+        chart.draw(dataTable, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="timeline" style="height: 100%;"></div>
+  </body>
+</html>
