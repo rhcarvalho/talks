@@ -15,5 +15,5 @@ install the dependencies, out of scope here.
 Run it with:
 
 ```
-python gevent-get-request.py
+./gevent-get-request.py
 ```

@@ -15,5 +15,5 @@ install the dependencies, out of scope here.
 Run it with:
 
 ```
-python asyncio-get-request.py
+./asyncio-get-request.py
 ```
