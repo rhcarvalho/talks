@@ -46,3 +46,11 @@ func download(url string) error {
 	fmt.Printf("%v: %v (%d bytes)\n", url, resp.Status, len(b))
 	return nil
 }
+
+// *** Notes ***
+// - All APIs are synchronous and thus easier to understand
+// - Code uses regular functions
+// - `go` keyword makes it clear what code runs in a separate goroutine
+// - Language runtime is built with concurrency in mind, no monkey patching
+// - Error handling is explicit
+// - No external dependencies

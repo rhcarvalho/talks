@@ -23,3 +23,11 @@ def download(url):
 
 if __name__ == "__main__":
     main()
+
+
+# *** Notes ***
+# - Requires monkey patching, import order matters
+# - Easier to understand than Python3 counter-part
+# - Easier to chain function calls
+# - Less code to read
+# - Exception handling is different than "normal Python"
