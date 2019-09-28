@@ -1,11 +1,11 @@
-# Python 3 concurrency example
+# Python 3.4 concurrency example
 
 This uses the `aiohttp` third-party library.
 
 Create a virtual environment and install the dependencies with:
 
 ```
-mktmpenv -p $(which python3) -r requirements.txt
+mktmpenv -p $(which python3.4) -r requirements.txt
 cd -
 ```
 

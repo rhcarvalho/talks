@@ -1,4 +1,4 @@
-# Python 2 concurrency example
+# Python 2.7 concurrency example
 
 This uses the `gevent` third-party library.
 
