@@ -1,26 +1,31 @@
-import aiohttp
 import asyncio
 
-@asyncio.coroutine
-def download(uri):
-    response = yield from aiohttp.request('GET', uri)
-    return (yield from response.read_and_close())
+import aiohttp
 
-def download2(uri):
-    response = yield from aiohttp.request('GET', uri)
-    return (yield from response.read_and_close())
 
-@asyncio.coroutine
-def print_beginning(uri):
-    result = yield from download(uri)
-    print(result[:100])
-
-if __name__ == '__main__':
+def main():
+    urls = [
+        "https://google.fr",
+        "https://google.hu",
+        "https://google.pl",
+    ]
     loop = asyncio.get_event_loop()
     loop.run_until_complete(asyncio.wait([
-        print_beginning('http://google.pl'),
-        print_beginning('http://google.fr'),
-        print_beginning('http://google.hu'),
+        print_info(url) for url in urls
     ]))
 
-print(download, download2)
+
+@asyncio.coroutine
+def download(url):
+    response = yield from aiohttp.request("GET", url)
+    return (yield from response.read_and_close())
+
+
+@asyncio.coroutine
+def print_info(url):
+    result = yield from download(url)
+    print("{}: {} ({} bytes)".format(url, "???", len(result)))
+
+
+if __name__ == "__main__":
+    main()

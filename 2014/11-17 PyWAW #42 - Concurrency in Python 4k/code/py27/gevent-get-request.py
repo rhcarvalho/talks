@@ -1,17 +1,24 @@
 import gevent
 from gevent import monkey
-mokey.patch_all()
+monkey.patch_all()
 import requests
 
-def download(uri):
-    response = requests.get(uri)
-    return response.content
 
-def print_beginning(uri):
-    result = download(uri)
-    print(result[:100])
-
-if __name__ == '__main__':
-    urls = ['http://google.pl', 'http://google.fr', 'http://google.hu']
-    jobs = [gevent.spawn(socket.gethostbyname, url) for url in urls]
+def main():
+    urls = [
+        "https://google.fr",
+        "https://google.hu",
+        "https://google.pl",
+    ]
+    jobs = [gevent.spawn(download, url) for url in urls]
     gevent.joinall(jobs, timeout=2)
+
+
+def download(url):
+    response = requests.get(url)
+    status = response.status_code
+    print("{}: {} {} ({} bytes)".format(url, status, response.reason, len(response.content)))
+
+
+if __name__ == "__main__":
+    main()
