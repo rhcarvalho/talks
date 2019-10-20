@@ -28,3 +28,7 @@ Optional:
 - if you feel like it, you can do the tour at home, and bring questions
 - install Go on your laptop (won't be needed, but can be useful to bring
 questions if you have trouble setting up a development environment)
+
+---
+
+[View slides on talks.godoc.org](https://talks.godoc.org/github.com/rhcarvalho/talks/2017/01-24%20A%20Tour%20of%20Go/a-tour-of-go.slide)
