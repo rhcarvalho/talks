@@ -1,0 +1,378 @@
+This is Go
+vienna.go
+26 Nov 2019
+
+Rodolfo Carvalho
+Sentry ❤️ Go
+rhcarvalho@gmail.com
+https://www.rodolfocarvalho.net
+
+
+* This is Go: a personal tale on what makes Go unique
+
+.html customize.html
+
+.image img/gophermega.webp
+.caption The Go gopher was designed by [[https://reneefrench.blogspot.com][Renee French]]
+
+: Hello everyone！
+
+: I've hand-picked five conversation points I'd like to share we you.
+: We can call it an alternative intro to Go and its ecosystem, see [[https://tour.golang.org][A Tour of Go]] for more.
+: It covers some of what I personally enjoy and miss when I code in other languages.
+
+: I'd be pleased to continue the conversation and hear your opinions later.
+
+
+* PyCon 2007, Computer (Programming) Literacy
+
+.image img/r0ml.webp
+.caption [[https://github.com/r0ml][Robert M. Lefkowitz]]
+
+: Early in my career as a software developer I heard this man, Robert Lefkowitz, define Computer Programming Literacy as "the art of communicating through symbols ideas about reality".
+
+: That builds upon Abelson & Sussman (SICP book): "programs must be written for people to read, and only incidentally for machines to execute"
+
+: And that definition of computer programming has had a deep influence on me and shaped the way how I think about and practice programming.
+
+
+* The art of communicating through symbols ideas about reality
+
+.image img/parapente.webp
+.caption Photo by [[https://unsplash.com/photos/e8_2PJXeg84][Óscar Ardèvol]]
+
+: So language is naturally important for communication.
+: What's the number one point to talk about then?
+
+* #1 Simplicity
+
+"Simplicity is the real reason why Go is successful" — Rob Pike, dotGo 2015
+
+.link https://youtu.be/rFejpH_tAHM
+
+: It is simplicity.
+: Year after year, I've come to appreciate more and more the simple, the obvious and the boring.
+: Life is full of complexities. Programming is intellectually demanding.
+: I feel simplicity can make our lives easier and happier.
+
+: Go tries hard to hide complexity and expose a simple, easy and safe to use "user interface".
+
+
+* Simplicity
+
+	package main
+
+	import "fmt"
+
+	func main() {
+		s := "Hello World"
+		fmt.Println(s)
+	}
+
+- Packages
+
+: Packages introduce namespaces
+
+- Fully Qualified Imports
+
+: Easy to tell where code is coming from
+
+- Static Typing with Type Inference
+
+: The safety of static typing without the inconvenience and noise
+
+- Single Dispatch
+
+: There is only one place to look for implementation
+
+- Capitalization is Meaningful
+
+: Very easy to control visibility without extra characters on screen
+
+
+* Simplicity
+
+: Language simplicity, in the form of lack of features, lack of multiple syntaxes for the same things, lack of obscure constructs, etc, makes the language easier to master, easier to read, easier to maintain code written in large teams.
+
+- Fits your brain
+
+: Compare the size of the language spec to that of other languages.
+
+- Small set of orthogonal features
+
+: Go is not competing on feature set.
+: While other languages evolve by adding features, Go was an attempt to select a small number of features that work well together.
+: Languages are getting more and more similar to each other. That is bad because diversity fosters innovation and expands expressiveness.
+
+: Too many features means time wasted choosing which ones to use. If the language is complicated:
+: - You must understand more things to read and work on the code.
+: - You must understand more things to debug and fix it.
+
+- Easy to learn
+
+: One can reasonably grasp the language, no need to learn and memorize weird constructs.
+
+- Easy to read
+
+: Similar to the C-family of languages
+
+- Go is [[https://youtu.be/4Dr8FXs9aJM][boring]]!
+
+: The language is boring if you're into designing languages, it doesn't have all sorts of fancy features.
+: Boring is exciting if you're into building programs you want to rely on for years.
+: Language is stable.
+: Runtime keeps improving.
+: Tooling keeps improving.
+
+- Great for larger teams
+
+: Simplicity means instant familiarity; easy to remember; easy to understand.
+
+
+* The art of COMMUNICATING through symbols ideas about reality
+
+: When we add people, communication is often affected by useless discussions
+
+
+* #2 gofmt
+
+.image img/go-build.webp
+.caption Gopher Artwork by [[https://github.com/ashleymcnamara/gophers][Ashley McNamara]]
+
+: This one is quick.
+: It inspired many languages; in the Open Source community many created their "gofmt" equivalents, but usage is nowhere near as homogeneous as in Go
+
+
+* #3 Error values, no exceptions
+
+.link https://blog.golang.org/errors-are-values
+
+- Explicit, on-the-spot, error handling
+
+: Certainly a point of controversy in some circles.
+: Go makes you think about error conditions upfront.
+
+: Otherwise, do you tend to think and write code to handle exceptional cases?
+
+- No especial syntax to learn
+
+- Think about errors upfront
+
+: While this can get frustrating for throw-away code you'd write in a scripting language, thinking about errors upfront encourages you to communicate better your ideas when things go wrong.
+
+	_, err = fd.Write(p0[a:b])
+	if err != nil {
+		return err
+	}
+	_, err = fd.Write(p1[c:d])
+	if err != nil {
+		return err
+	}
+	_, err = fd.Write(p2[e:f])
+	if err != nil {
+		return err
+	}
+	// and so on
+
+
+* Programming your error handling
+
+	type errWriter struct {
+		w   io.Writer
+		err error
+	}
+	func (ew *errWriter) write(buf []byte) {
+		if ew.err != nil {
+			return
+		}
+		_, ew.err = ew.w.Write(buf)
+	}
+
+Use it:
+
+	ew := &errWriter{w: fd}
+	ew.write(p0[a:b])
+	ew.write(p1[c:d])
+	ew.write(p2[e:f])
+	// and so on
+	if ew.err != nil {
+		return ew.err
+	}
+
+
+* The art of communicating through symbols IDEAS about reality
+
+: So we're talking about communicating ideas...
+: Interfaces help communicate ideas
+
+
+* #4 Interfaces
+
+Go interfaces enable post-facto abstraction.
+
+- Python: can't write it down and type-check, you just duck type
+- Java: must declare _a_priori_, 3rd-party code cannot implement your interfaces
+- Implicitly satisfiable interfaces
+
+Frequently used: `io.Reader`, `io.Writer`, `fmt.Stringer`, `interface{}`
+
+Example:
+
+	type Reader interface {
+		Read(p []byte) (n int, err error)
+	}
+
+
+* The bigger the interface, the weaker the abstraction
+
+Keep them small, and compose!
+
+	type ReadWriter interface {
+		Reader
+		Writer
+	}
+
+
+* To implement an interface
+
+Implement methods with the appropriate signatures:
+
+	type File struct {
+		Name string
+	}
+
+	func (f *File) Read(p []byte) (n int, err error) {
+		return len(p), nil
+	}
+
+	func (f *File) Write(p []byte) (n int, err error) {
+		return len(p), nil
+	}
+
+	func (f *File) String() string {
+		return f.Name
+	}
+
+Nothing more.
+
+: Defining and implementing interfaces feel very lightweight.
+
+
+* To define your own interface
+
+Declare the method signatures:
+
+	type Greeter interface {
+		Greet(string) error
+	}
+
+
+* Swiss-knife interface
+
+.link https://go-review.googlesource.com/#/c/20763/
+
+	// go/src/net/http/request.go
+	func (l *maxBytesReader) tooLarge() (n int, err error) {
+		if !l.stopped {
+			l.stopped = true
+
+			// The server code and client code both use
+			// maxBytesReader. This "requestTooLarge" check is
+			// only used by the server code. To prevent binaries
+			// which only using the HTTP Client code (such as
+			// cmd/go) from also linking in the HTTP server, don't
+			// use a static type assertion to the server
+			// "*response" type. Check this interface instead:
+			type requestTooLarger interface {
+				requestTooLarge()
+			}
+			if res, ok := l.w.(requestTooLarger); ok {
+				res.requestTooLarge()
+			}
+		}
+		return 0, errors.New("http: request body too large")
+	}
+
+: See how an inline interface definition can help remove code dependency on an external package.
+: In this example, the Go team was able to use an interface to eliminate a dependency on HTTP server code from the `go` tool.
+
+
+* The art of communicating through symbols ideas about REALITY
+
+: So we're talking about communicating ideas that describe a certain reality
+: How do we express reality better than with executable code demonstrating what we want to communicate?
+: Comes our last, fifth point, automated testing.
+
+
+* #5 go test
+
+Because there are no exceptions and because errors are (interface) values, it is
+easy to write concise table-driven tests.
+
+Define tests:
+
+	type atoi64Test struct {
+		in  string
+		out int64
+		err error
+	}
+
+	var atoi64tests = []atoi64Test{
+		{"", 0, ErrSyntax},
+		{"0", 0, nil},
+		// ...
+		{"9223372036854775809", 1<<63 - 1, ErrRange},
+		{"-9223372036854775809", -1 << 63, ErrRange},
+	}
+
+
+* Test them all
+
+	func TestParseInt64(t *testing.T) {
+		for i := range atoi64tests {
+			test := &atoi64tests[i]
+			out, err := ParseInt(test.in, 10, 64)
+			if test.out != out || !reflect.DeepEqual(test.err, err) {
+				t.Errorf("Atoi64(%q) = %v, %v want %v, %v",
+					test.in, out, err, test.out, test.err)
+			}
+		}
+	}
+
+Even if a single test case fails, all other tests can still be run.
+
+There are no _assertions_, no _exceptions_ to control the test flow, and no need
+for the "single assert per test method" rule.
+
+
+* More
+
+- benchmarks
+- profiling
+- tracing
+- race detector
+- ...
+
+
+* This is Go
+
+“Go is an attempt to combine the *safety* and *performance* of statically typed compiled languages with the *expressiveness* and *convenience*, and the *fun*, of a dynamic typed interpreted language.”
+
+— Rob Pike, OSCON 2010
+
+.link https://youtu.be/5kj5ApnhPAE
+
+: Personally, I feel Go is a very successful attempt.
+
+
+* Recap
+
+Go strives for *simplicity*
+
+Go has great tooling
+
+Go helps you think about errors
+
+Go interfaces allow for composing abstractions
+
+Go empowers us to communicate through symbols ideas about reality

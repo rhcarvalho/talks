@@ -1,0 +1,28 @@
+<script>
+(() => {
+  window.addEventListener('DOMContentLoaded', (event) => {
+    // Replace presenter company name with a logo
+    document.querySelectorAll("div.presenter p:nth-child(2)").forEach((e) => {
+      e.innerHTML = '<img src="img/sentry-logo.svg" alt="Sentry" height="48" style="margin-left:-8px;margin-bottom:-14px">❤️<img src="img/go-logo.svg" alt="Go" height="48" style="padding-left:4px;margin-bottom:-12px">';
+    });
+  });
+})();
+</script>
+<style>
+@media screen {
+  /* Set global background */
+  section.slides {
+    background-image: url("img/sentry-pattern.webp");
+  }
+
+  /* De-emphasize non-current slides */
+  article.far-past,
+  article.past,
+  article.next,
+  article.far-next {
+    /* display: none !important; */
+    opacity: 0.2;
+    filter: saturate(.2);
+  }
+}
+</style>
