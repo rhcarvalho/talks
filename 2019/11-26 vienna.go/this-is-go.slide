@@ -10,7 +10,8 @@ https://www.rodolfocarvalho.net
 
 * This is Go: a personal tale on what makes Go unique
 
-.html customize.html
+# Not available in talks.godoc.org
+#.html customize.html
 
 .image img/gophermega.webp
 .caption The Go gopher was designed by [[https://reneefrench.blogspot.com][Renee French]]
