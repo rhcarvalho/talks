@@ -1,5 +1,5 @@
 Django==1.7
-djangorestframework==2.4.3
+djangorestframework==3.11.2
 
 django-rest-swagger==0.1.14
 gevent==1.0.1
