@@ -1,0 +1,518 @@
+<!-- livebook:{"file_entries":[{"name":"stackoverflow-dev-survey-2025-technology-most-popular-technologies-language-social.png","type":"attachment"}]} -->
+
+# 🔥I had a problem, so I thought about using threads. Now I have two problems.
+
+```elixir
+Mix.install([
+  {:pythonx, "~> 0.4.2"},
+  {:kino_pythonx, "~> 0.1.0"}
+])
+```
+
+```pyproject.toml
+[project]
+name = "project"
+version = "0.0.0"
+requires-python = "==3.13.*"
+dependencies = []
+```
+
+## Introdução
+
+* Seu **nome**
+* A **linguagem menos popular** que você já usou (https://survey.stackoverflow.co/2025/technology#most-popular-technologies-language)
+  ![Popular Languages Chart](files/stackoverflow-dev-survey-2025-technology-most-popular-technologies-language-social.png)
+* Sua parte do nosso **prompt** colaborativo para geração de imagem usando IA
+
+<!-- livebook:{"break_markdown":true} -->
+
+> ...
+
+## Cenário
+
+Para tornar nossa conversa mais rica e tangível, vamos explorar e revisitar um cenário específico:
+
+> Imagine um website que automatiza fluxos de trabalho de um escrito de
+> advocacia, e o que acontece quando um cliente visita a aplicação e solicita a
+> criação de um novo documento a partir de dados que ele fornece, assim como de
+> informações adicionais as quais o sistema tem acesso.
+
+Quando um usuário visita a aplicação para realizar esta ação, o que acontece?
+
+* Requisição HTTP
+* Servidor **HTTP** aceita a requisição
+* Servidor acessa **banco de dados**
+* Servidor valida requisição
+* **Job assíncrono** é adicionado à fila de processamento
+* Usuário é informado que seu documento está sendo criado
+* Servidor realiza diversas chamadas a **APIs externas**
+* Servidor envia notificação para o WhatsApp
+* Usuário recebe um e-mail com o link para o documento
+
+<!-- Learn more at https://mermaid-js.github.io/mermaid -->
+
+```mermaid
+graph TD
+  %% Diagrama de alto nível: requisição HTTP (síncrona) + processamento em background (assíncrono)
+
+  subgraph "Request/Response (síncrono)"
+    U[Usuário / Navegador]
+    WS[Servidor HTTP / App]
+    DB[(Banco de Dados)]
+    Q[[Fila de Jobs]]
+
+    U -->|POST /create_document| WS
+    WS -->|Validar payload| WS
+    WS -->|Persistir início do fluxo| DB
+    WS -->|Enfileirar job| Q
+    WS -->|202 Accepted - documento sendo criado| U
+  end
+
+  subgraph "Processamento em Background (assíncrono)"
+    W[Worker]
+    EXT[(APIs externas: tokens, serviços)]
+    TPL[(Templates)]
+    RND[Renderizar Documento]
+    STO[(Armazenamento / Object Store)]
+    WA[[Notificação WhatsApp]]
+    EM[[E-mail com link]]
+
+    W -->|Consumir job| Q
+    W -->|Buscar tokens e dados| EXT
+    W -->|Buscar template| TPL
+    W --> RND
+    RND -->|bytes do documento| STO
+    W -->|Atualizar status: done e URL| DB
+    W -->|Enviar WhatsApp| WA
+    W -->|Enviar e-mail| EM
+  end
+
+  %% Relações cruzadas (assíncronas)
+  Q -.-> W
+  STO -.->|URL do documento| DB
+```
+
+O que acontece com 10 usuários simultâneos?  
+O que muda com 100, 1000 usuários?
+
+## Concorrência e Paralelismo
+
+* Concurrency is not parallelism, by Rob Pike at Heroku’s Waza conference (video
+  and slides)  
+  https://go.dev/blog/waza-talk
+* Concorrência: é sobre estruturar um programa para lidar com muitas coisas ao mesmo tempo (composição de atividades independentes). É um modelo de design.
+* Paralelismo: é sobre executar muitas coisas ao mesmo tempo para terminar mais
+  rápido. É um detalhe de execução em múltiplos núcleos de CPU.
+* Relação: concorrência habilita paralelismo, mas não implica; dá para ter
+  concorrência sem paralelismo (1 núcleo) e paralelismo sem concorrência (loop
+  data-parallel, SIMD).
+* Objetivos: concorrência melhora organização, latência e separação de preocupações; paralelismo melhora throughput/tempo total.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<!-- Learn more at https://mermaid-js.github.io/mermaid -->
+
+```mermaid
+flowchart LR
+  %% Concurrency vs Parallelism (Rob Pike)
+
+  subgraph "Concurrency (design and organization)"
+    direction TB
+    A1[Task A]
+    B1[Task B]
+    CH[[Channel or Queue]]
+    S[Scheduler]
+    CPU1[(1 core)]
+
+    A1 --> CH
+    B1 --> CH
+    CH --> S
+    S -->|time-sliced on| CPU1
+  end
+
+  subgraph "Parallelism (execution on hardware)"
+    direction TB
+    A2[Task A]
+    B2[Task B]
+    CORE1[(Core 1)]
+    CORE2[(Core 2)]
+
+    A2 --> CORE1
+    B2 --> CORE2
+  end
+
+  %% Relationship: concurrency enables parallelism
+  S -.->|enables parallel execution| A2
+```
+
+## ➡️ Nothing Beats Simplicity: Sequential Programming
+
+Código Python sequencial, mostrando o que seria um pequeno servidor usando Flask.
+
+```python
+from flask import Flask, request, jsonify
+import uuid
+
+app = Flask(__name__)
+
+# HTTP request-response: valida, persiste, enfileira e responde
+@app.route('/create_document', methods=['POST'])
+def create_document():
+    payload = request.get_json(silent=True) or {}
+
+    # 1) Validação da requisição
+    required = ["client_id", "email", "phone", "content"]
+    missing = [k for k in required if k not in payload]
+    if missing:
+        return jsonify(error="invalid_request", missing=missing), 400
+
+    # 2) Gerar ID e 3) Persistir início do fluxo (DB)
+    request_id = str(uuid.uuid4())
+    db_save_request({
+        "request_id": request_id,
+        "client_id": payload["client_id"],
+        "status": "queued",
+        "metadata": extract_metadata(payload),  # opcional
+    })
+
+    # 4) Adicionar job assíncrono na fila
+    enqueue_create_document_job(request_id, payload)
+
+    # 5) Informar ao usuário que o documento está sendo criado
+    return jsonify(
+        status="accepted",
+        request_id=request_id,
+        message="Seu documento está sendo criado"
+    ), 202
+```
+
+Pseudo-código do worker (background job) — executa chamadas a APIs externas, gera o documento, persiste e notifica:
+
+```python
+# Ex.: Celery/RQ/Arq/etc. Assumimos que o worker está configurado no projeto.
+
+def create_document_job(request_id: str, payload: dict) -> None:
+    # Marcar como em processamento
+    db_mark_processing(request_id)
+
+    # Chamar serviços/APIs externas e preparar insumos
+    tokens = fetch_external_tokens(payload)
+    template = fetch_template_for_client(payload["client_id"], payload)
+
+    # Gerar documento a partir de template + dados + tokens
+    document_bytes = render_document(template, payload, tokens)
+
+    # Armazenar documento e obter URL público
+    document_url = store_document_bytes(request_id, document_bytes)
+
+    # Persistir conclusão
+    db_mark_done(request_id, url=document_url)
+
+    # Notificações externas
+    send_whatsapp(payload["phone"], f"Seu documento está pronto: {document_url}")
+    send_email(payload["email"], subject="Documento pronto", link=document_url)
+```
+
+## 🖥️ Operating System Processes
+
+Um processo no sistema operacional é um conceito fundamental que representa a
+execução de um programa. Cada processo possui seu próprio espaço de memória e
+recursos, permitindo que múltiplos programas sejam executados simultaneamente
+sem interferência.
+
+Aplicado ao nosso cenário, uma forma típica de lidar com múltiplos usuários é
+rodar múltiplos processos (um por usuário) que compartilham o mesmo código, mas
+cada um com seu próprio estado e recursos.
+
+Funciona muito bem, vide o modelo CGI, PHP, Apache, Nginx.
+
+<!-- livebook:{"break_markdown":true} -->
+
+<!-- Learn more at https://mermaid-js.github.io/mermaid -->
+
+```mermaid
+flowchart LR
+  %% CGI: one OS process per request
+
+  subgraph "Clients"
+    C1[Client 1]
+    C2[Client 2]
+    C3[Client 3]
+  end
+
+  subgraph "Web Server"
+    WS[Web Server]
+  end
+
+  subgraph "OS Processes"
+    direction TB
+    P1[CGI Process 1]
+    P2[CGI Process 2]
+    P3[CGI Process 3]
+  end
+
+  DB[(Database)]
+  FS[(Filesystem)]
+
+  C1 -->|HTTP req| WS
+  C2 -->|HTTP req| WS
+  C3 -->|HTTP req| WS
+
+  WS -->|spawn CGI| P1
+  WS -->|spawn CGI| P2
+  WS -->|spawn CGI| P3
+
+  P1 -->|read write| DB
+  P2 -->|read write| DB
+  P3 -->|read write| DB
+
+  P1 -->|read write| FS
+  P2 -->|read write| FS
+  P3 -->|read write| FS
+
+  P1 -->|stdout| WS
+  P2 -->|stdout| WS
+  P3 -->|stdout| WS
+
+  WS -->|HTTP resp| C1
+  WS -->|HTTP resp| C2
+  WS -->|HTTP resp| C3
+```
+
+## 🧵 The Traditional: Threads
+
+Uma abordagem tradicional para concorrência em sistemas operacionais é o uso de
+threads. Threads são unidades de execução dentro de um processo e compartilham o
+mesmo espaço de memória, permitindo comunicação e compartilhamento de dados de
+forma mais eficiente do que processos separados.
+
+No nosso cenário, podemos usar threads para lidar com múltiplos usuários
+simultaneamente, permitindo que cada thread processe uma requisição de forma
+independente. Linguagens como Python e Ruby, porém, têm limitações em relação
+ao uso de threads devido ao Global Interpreter Lock (GIL), que impede a
+execução simultânea de múltiplas threads em um único processo.
+
+Há anos estas comunidades têm buscado alternativas e soluções para contornar
+essas limitações, mas é um grande desafio.
+
+## 🤝🏼 Cooperative Concurrency: Coroutines
+
+Talvez muitos não conheçam, mas corrotinas são uma forma poderosa de lidar com
+concorrência de maneira cooperativa.
+
+Esse modelo pressupõe um *event loop* no contexto da linguagem ou aplicação.
+Python suporta corrotinas usando a keyword `yield`.
+
+Historicamente, vários projetos tentaram tornar esse modelo mais popular:
+
+* Twisted
+* Greenlets
+
+Porém, via de regra eles requerem modificações em tempo de execução em funções e classes da biblioteca padrão, através do poderoso e perigoso *monkey-patching*, além de necessitar cooperação ou no mínimo compatibilidade de outras bibliotecas usadas no projeto, que não necessariamente estão adaptadas.
+
+1. Data pipeline with send/close (consumer coroutine)
+
+```python
+# grep-like coroutine that receives lines via .send() and filters by a pattern
+def grep(pattern):
+    print(f"Searching for: {pattern}")
+    try:
+        while True:
+            line = (yield)  # receive a value sent into the coroutine
+            if pattern in line:
+                print(f"MATCH: {line}")
+    except GeneratorExit:
+        print("Closing coroutine")
+
+# Prime the coroutine before first send
+g = grep("ERROR")
+next(g)  # or g.send(None)
+
+g.send("INFO starting up")
+g.send("WARN something odd")
+g.send("ERROR failed to process id=42")
+g.close()
+```
+
+1. Tiny cooperative scheduler (round-robin) with yield for cooperative multitasking
+
+```python
+from collections import deque
+
+def task(name, n):
+    for i in range(n):
+        print(f"{name}: step {i}")
+        yield  # cooperatively yield control back to the scheduler
+    print(f"{name}: done")
+
+def run(tasks):
+    q = deque(tasks)
+    while q:
+        t = q.popleft()
+        try:
+            next(t)      # run until the task yields
+            q.append(t)  # requeue for the next round
+        except StopIteration:
+            pass          # task finished
+
+run([task("A", 3), task("B", 2), task("C", 4)])
+```
+
+No primeiro, `yield` é o ponto de suspensão e `.send(valor)` envia dados para dentro da corrotina.  
+No segundo, `yield` devolve voluntariamente o controle para que um agendador simples possa intercalar tarefas.
+
+## The Modern: Async/Await
+
+Modelo foi adotado por diversas linguagens nos últimos anos, como por exemplo
+Python, JavaScript e Rust.
+
+<!-- livebook:{"force_markdown":true} -->
+
+```python
+import asyncio
+
+async def grep(pattern: str, q: asyncio.Queue):
+    print(f"Searching for: {pattern}")
+    while True:
+        line = await q.get()
+        if line is None:  # sentinel to stop
+            break
+        if pattern in line:
+            print(f"MATCH: {line}")
+    print("Closing coroutine")
+
+async def main():
+    q = asyncio.Queue()
+    consumer = asyncio.create_task(grep("ERROR", q))
+
+    await q.put("INFO starting up")
+    await q.put("WARN something odd")
+    await q.put("ERROR failed to process id=42")
+    await q.put(None)  # stop
+    await consumer
+
+asyncio.run(main())
+```
+
+<!-- livebook:{"force_markdown":true} -->
+
+```python
+import asyncio
+
+async def task(name, n):
+    for i in range(n):
+        print(f"{name}: step {i}")
+        await asyncio.sleep(0)  # cooperative yield to the event loop
+    print(f"{name}: done")
+
+async def main():
+    await asyncio.gather(
+        task("A", 3),
+        task("B", 2),
+        task("C", 4),
+    )
+
+asyncio.run(main())
+```
+
+Mas esse modelo tem um problema prático:
+
+* What Color is Your Function? (blog post)  
+  https://journal.stuffwithstuff.com/2015/02/01/what-color-is-your-function/
+
+## 👄 The Different: Communicating Sequential Processes (CSP)
+
+CSP modela concorrência como processos leves que se comunicam por trocas de mensagem explicitas através de canais
+— sem compartilhamento direto de memória. É o paradigma por trás de goroutines e
+channels em Go e funciona muito bem para pipelines e fluxos de trabalho
+concorrentes.
+
+* Processos leves (`goroutines`) executam tarefas independentes.
+* Comunicação explícita por canais (`channels`), sincronizando/transferindo dados.
+* Facilita raciocínio sobre concorrência e composição de pipelines.
+
+Exemplo simples em Go (simula criação de documentos em paralelo e notifica via
+channel):
+
+```go
+package main
+
+import (
+    "fmt"
+    "time"
+)
+
+func createDocument(id int, out chan<- string) {
+    time.Sleep(2 * time.Second) // trabalho simulado
+    out <- fmt.Sprintf("document-%d.pdf ready", id)
+}
+
+func main() {
+    results := make(chan string)
+    for i := 1; i <= 5; i++ {
+        go createDocument(i, results)
+    }
+
+    for i := 1; i <= 5; i++ {
+        fmt.Println(<-results)
+    }
+}
+```
+
+## 🐛 Problema: estado compartilhado
+
+* Locks, semaphores & other synchronization primitives
+* Misassumptions (e.g. what operations are atomic or not)
+* Data races
+* Deadlocks
+* Livelocks
+
+Threads e corrotinas levam a uma organização de código que geralmente envolve o compartilhamento de memória entre "atividades". Este compartilhamento tende a causar bugs difíceis de reproduzir e corrigir.
+
+Sem clareza de estrutura e comunicação entre as atividades, bases de código viram um caos 🔥
+
+## ⭐ Hollywood, anyone? Actor Model
+
+O modelo de atores trata cada "ator" como uma entidade independente que processa
+
+* Exemplos: Erlang/Elixir (processos leves, supervisores), Akka (JVM), Orleans (.NET)
+
+* Características principais:
+
+  * Isolamento de estado por ator
+  * Envio assíncrono de mensagens
+  * Supervisão e hierarquias para recuperação de falhas
+  * Escala horizontal natural
+
+* Quando usar: sistemas distribuídos, telecomunicações, pipelines de eventos, chat/colaboração em tempo real
+
+<!-- livebook:{"break_markdown":true} -->
+
+<!-- Learn more at https://mermaid-js.github.io/mermaid -->
+
+```mermaid
+graph BT
+  C(Client #3) ~~~ B(Client #2) ~~~ A(Client #1)
+  A & B & C -->|request| GenServer
+  GenServer -.->|reply| A & B & C
+```
+
+## Conclusão
+
+* Concorrência é uma ferramenta de organização de código
+* Diferentes linguagens suportam diferentes primitivas
+* OS Processes -> Threads -> Green threads/coroutines -> ?
+* Outros modelos
+  * CSP em Go: `goroutines`, `channels`, `select`
+  * Actor model em Erlang/Elixir: `process (VM)`, `mailbox`, `spawn`, `receive`
+* Estado compartilhado e imutabilidade
+
+## Recomendação de Leitura
+
+Livro:
+
+> **Seven Languages in Seven Weeks**  
+> A Pragmatic Guide to Learning Programming Languages  
+> by Bruce A. Tate
+
+https://pragprog.com/titles/btlang/seven-languages-in-seven-weeks/
